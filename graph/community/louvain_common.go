@@ -6,10 +6,9 @@ package community
 
 import (
 	"fmt"
-	"sort"
+	"slices"
 
 	"golang.org/x/exp/rand"
-
 	"gonum.org/v1/gonum/graph"
 	"gonum.org/v1/gonum/graph/internal/set"
 )
@@ -347,7 +346,7 @@ func newSlice(s set.Set[int]) *slice {
 	for i := range s {
 		elems = append(elems, i)
 	}
-	sort.Ints(elems)
+	slices.Sort(elems)
 	return &slice{elems: elems}
 }
 

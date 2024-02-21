@@ -5,69 +5,61 @@
 package ordered
 
 import (
-	"sort"
+	"cmp"
+	"slices"
 
 	"gonum.org/v1/gonum/graph"
 )
 
 // ByID sorts a slice of graph.Node by ID.
-func ByID(n []graph.Node) {
-	sort.Slice(n, func(i, j int) bool { return n[i].ID() < n[j].ID() })
+func ByID[S interface{ ~[]E }, E graph.Node](n S) {
+	slices.SortFunc(n, func(a, b E) int { return cmp.Compare(a.ID(), b.ID()) })
 }
 
-// BySliceValues sorts a slice of []int64 lexically by the values of the
-// []int64.
-func BySliceValues(c [][]int64) {
-	sort.Slice(c, func(i, j int) bool {
-		a, b := c[i], c[j]
+// BySliceValues sorts a slice of []cmp.Ordered (such as []int64)
+// lexically by the values of the []cmp.Ordered.
+func BySliceValues[E cmp.Ordered](c [][]E) {
+	slices.SortFunc(c, func(a, b []E) int {
 		l := len(a)
 		if len(b) < l {
 			l = len(b)
 		}
 		for k, v := range a[:l] {
-			if v < b[k] {
-				return true
-			}
-			if v > b[k] {
-				return false
+			if n := cmp.Compare(v, b[k]); n != 0 {
+				return n
 			}
 		}
-		return len(a) < len(b)
+		return cmp.Compare(len(a), len(b))
 	})
 }
 
 // BySliceIDs sorts a slice of []graph.Node lexically by the IDs of the
 // []graph.Node.
 func BySliceIDs(c [][]graph.Node) {
-	sort.Slice(c, func(i, j int) bool {
-		a, b := c[i], c[j]
+	slices.SortFunc(c, func(a, b []graph.Node) int {
 		l := len(a)
 		if len(b) < l {
 			l = len(b)
 		}
 		for k, v := range a[:l] {
-			if v.ID() < b[k].ID() {
-				return true
-			}
-			if v.ID() > b[k].ID() {
-				return false
+			if n := cmp.Compare(v.ID(), b[k].ID()); n != 0 {
+				return n
 			}
 		}
-		return len(a) < len(b)
+		return cmp.Compare(len(a), len(b))
 	})
 }
 
 // LinesByIDs sort a slice of graph.LinesByIDs lexically by the From IDs,
 // then by the To IDs, finally by the Line IDs.
 func LinesByIDs(n []graph.Line) {
-	sort.Slice(n, func(i, j int) bool {
-		a, b := n[i], n[j]
-		if a.From().ID() != b.From().ID() {
-			return a.From().ID() < b.From().ID()
+	slices.SortFunc(n, func(a, b graph.Line) int {
+		if n := cmp.Compare(a.From().ID(), b.From().ID()); n != 0 {
+			return n
 		}
-		if a.To().ID() != b.To().ID() {
-			return a.To().ID() < b.To().ID()
+		if n := cmp.Compare(a.To().ID(), b.To().ID()); n != 0 {
+			return n
 		}
-		return a.ID() < b.ID()
+		return cmp.Compare(a.ID(), b.ID())
 	})
 }

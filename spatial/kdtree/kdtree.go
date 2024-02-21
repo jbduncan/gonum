@@ -302,7 +302,7 @@ func (h *Heap) Max() ComparableDist  { return (*h)[0] }
 func (h *Heap) Len() int             { return len(*h) }
 func (h *Heap) Less(i, j int) bool   { return (*h)[i].Comparable == nil || (*h)[i].Dist > (*h)[j].Dist }
 func (h *Heap) Swap(i, j int)        { (*h)[i], (*h)[j] = (*h)[j], (*h)[i] }
-func (h *Heap) Push(x interface{})   { (*h) = append(*h, x.(ComparableDist)) }
+func (h *Heap) Push(x interface{})   { *h = append(*h, x.(ComparableDist)) }
 func (h *Heap) Pop() (i interface{}) { i, *h = (*h)[len(*h)-1], (*h)[:len(*h)-1]; return i }
 
 // NKeeper is a Keeper that retains the n best ComparableDists that have been passed to Keep.
