@@ -5,7 +5,6 @@
 package vptree
 
 import (
-	"cmp"
 	"flag"
 	"fmt"
 	"math"
@@ -18,6 +17,8 @@ import (
 	"unsafe"
 
 	"golang.org/x/exp/rand"
+
+	"gonum.org/v1/gonum/internal/ordered"
 )
 
 var (
@@ -357,19 +358,7 @@ func TestDo(t *testing.T) {
 }
 
 func sortLexical(p []Point) {
-	// Copied from graph/internal/ordered.BySliceValues
-	slices.SortFunc(p, func(a, b Point) int {
-		l := len(a)
-		if len(b) < l {
-			l = len(b)
-		}
-		for k, v := range a[:l] {
-			if n := cmp.Compare(v, b[k]); n != 0 {
-				return n
-			}
-		}
-		return cmp.Compare(len(a), len(b))
-	})
+	ordered.BySliceValues(p)
 }
 
 func BenchmarkNew(b *testing.B) {

@@ -16,23 +16,6 @@ func ByID[S interface{ ~[]E }, E graph.Node](n S) {
 	slices.SortFunc(n, func(a, b E) int { return cmp.Compare(a.ID(), b.ID()) })
 }
 
-// BySliceValues sorts a slice of []cmp.Ordered (such as []int64)
-// lexically by the values of the []cmp.Ordered.
-func BySliceValues[E cmp.Ordered](c [][]E) {
-	slices.SortFunc(c, func(a, b []E) int {
-		l := len(a)
-		if len(b) < l {
-			l = len(b)
-		}
-		for k, v := range a[:l] {
-			if n := cmp.Compare(v, b[k]); n != 0 {
-				return n
-			}
-		}
-		return cmp.Compare(len(a), len(b))
-	})
-}
-
 // BySliceIDs sorts a slice of []graph.Node lexically by the IDs of the
 // []graph.Node.
 func BySliceIDs(c [][]graph.Node) {
