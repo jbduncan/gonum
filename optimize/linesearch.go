@@ -6,6 +6,7 @@ package optimize
 
 import (
 	"math"
+	"slices"
 
 	"gonum.org/v1/gonum/floats"
 )
@@ -114,7 +115,7 @@ func (ls *LinesearchMethod) Iterate(loc *Location) (Operation, error) {
 
 			// Compute the next evaluation point and store it in loc.X.
 			floats.AddScaledTo(loc.X, ls.x, step, ls.dir)
-			if floats.Equal(ls.x, loc.X) {
+			if slices.Equal(ls.x, loc.X) {
 				// Step size has become so small that the next evaluation point is
 				// indistinguishable from the starting point for the current
 				// iteration due to rounding errors.
@@ -164,7 +165,7 @@ func (ls *LinesearchMethod) initNextLinesearch(loc *Location) (Operation, error)
 	}
 
 	floats.AddScaledTo(loc.X, ls.x, step, ls.dir)
-	if floats.Equal(ls.x, loc.X) {
+	if slices.Equal(ls.x, loc.X) {
 		// Step size is so small that the next evaluation point is
 		// indistinguishable from the starting point for the current iteration
 		// due to rounding errors.

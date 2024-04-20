@@ -6,11 +6,11 @@ package samplemv
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/mat"
 	"gonum.org/v1/gonum/spatial/r1"
 	"gonum.org/v1/gonum/stat"
@@ -279,7 +279,7 @@ func TestMetropolisHastingser(t *testing.T) {
 		same := true
 		count := burnin
 		for i := 0; i < samples; i++ {
-			if !floats.Equal(batch.RawRowView(i), fullBatch.RawRowView(count)) {
+			if !slices.Equal(batch.RawRowView(i), fullBatch.RawRowView(count)) {
 				fmt.Println("sample ", i, "is different")
 				same = false
 				break

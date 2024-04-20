@@ -5,6 +5,7 @@
 package testlapack
 
 import (
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -125,10 +126,10 @@ func Dorm2rTest(t *testing.T, impl Dorm2rer) {
 				tauCopy := make([]float64, len(tau))
 				copy(tauCopy, tau)
 				impl.Dorm2r(side, trans, mc, nc, k, a, lda, tau, c, ldc, work)
-				if !floats.Equal(a, aCopy) {
+				if !slices.Equal(a, aCopy) {
 					t.Errorf("a changed in call")
 				}
-				if !floats.Equal(tau, tauCopy) {
+				if !slices.Equal(tau, tauCopy) {
 					t.Errorf("tau changed in call")
 				}
 				if !floats.EqualApprox(cMat.Data, c, 1e-14) {

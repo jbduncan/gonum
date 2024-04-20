@@ -7,6 +7,7 @@ package distmv
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -564,7 +565,7 @@ func TestNormalScoreInput(t *testing.T) {
 		x := make([]float64, len(test.x))
 		copy(x, test.x)
 		score := normal.ScoreInput(nil, x)
-		if !floats.Equal(x, test.x) {
+		if !slices.Equal(x, test.x) {
 			t.Errorf("x modified during call to ScoreInput")
 		}
 		scoreFD := fd.Gradient(nil, normal.LogProb, x, nil)

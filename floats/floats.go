@@ -242,45 +242,27 @@ func Dot(s1, s2 []float64) float64 {
 
 // Equal returns true when the slices have equal lengths and
 // all elements are numerically identical.
+//
+// Deprecated: This function simply calls [slices.Equal].
 func Equal(s1, s2 []float64) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i, val := range s1 {
-		if s2[i] != val {
-			return false
-		}
-	}
-	return true
+	return slices.Equal(s1, s2)
 }
 
 // EqualApprox returns true when the slices have equal lengths and
 // all element pairs have an absolute tolerance less than tol or a
 // relative tolerance less than tol.
 func EqualApprox(s1, s2 []float64, tol float64) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i, a := range s1 {
-		if !scalar.EqualWithinAbsOrRel(a, s2[i], tol, tol) {
-			return false
-		}
-	}
-	return true
+	return slices.EqualFunc(s1, s2, func(a float64, b float64) bool {
+		return scalar.EqualWithinAbsOrRel(a, b, tol, tol)
+	})
 }
 
 // EqualFunc returns true when the slices have the same lengths
 // and the function returns true for all element pairs.
+//
+// Deprecated: This function simply calls [slices.EqualFunc].
 func EqualFunc(s1, s2 []float64, f func(float64, float64) bool) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i, val := range s1 {
-		if !f(val, s2[i]) {
-			return false
-		}
-	}
-	return true
+	return slices.EqualFunc(s1, s2, f)
 }
 
 // EqualLengths returns true when all of the slices have equal length,
@@ -346,12 +328,7 @@ func Find(inds []int, f func(float64) bool, s []float64, k int) ([]int, error) {
 // HasNaN returns true when the slice s has any values that are NaN and false
 // otherwise.
 func HasNaN(s []float64) bool {
-	for _, v := range s {
-		if math.IsNaN(v) {
-			return true
-		}
-	}
-	return false
+	return slices.ContainsFunc(s, math.IsNaN)
 }
 
 // LogSpan returns a set of n equally spaced points in log space between,
@@ -643,16 +620,7 @@ func Reverse(s []float64) {
 // Same returns true when the input slices have the same length and all
 // elements have the same value with NaN treated as the same.
 func Same(s, t []float64) bool {
-	if len(s) != len(t) {
-		return false
-	}
-	for i, v := range s {
-		w := t[i]
-		if v != w && !(math.IsNaN(v) && math.IsNaN(w)) {
-			return false
-		}
-	}
-	return true
+	return slices.Compare(s, t) == 0
 }
 
 // Scale multiplies every element in dst by the scalar c.

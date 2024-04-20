@@ -6,11 +6,11 @@ package fd
 
 import (
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -100,7 +100,7 @@ func TestJacobian(t *testing.T) {
 			t.Errorf("Case %d (default settings): unexpected Jacobian.\nwant: %v\ngot:  %v",
 				tc, mat.Formatted(want, mat.Prefix("      ")), mat.Formatted(got, mat.Prefix("      ")))
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %d (default settings): x modified", tc)
 		}
 	}
@@ -202,7 +202,7 @@ func TestJacobian(t *testing.T) {
 			t.Errorf("Case %d: unexpected Jacobian.\nwant: %v\ngot:  %v",
 				tc, mat.Formatted(want, mat.Prefix("      ")), mat.Formatted(got, mat.Prefix("      ")))
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %d: x modified", tc)
 		}
 
@@ -215,7 +215,7 @@ func TestJacobian(t *testing.T) {
 			t.Errorf("Case %d (concurrent): unexpected Jacobian.\nwant: %v\ngot:  %v",
 				tc, mat.Formatted(want, mat.Prefix("      ")), mat.Formatted(got, mat.Prefix("      ")))
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %d (concurrent): x modified", tc)
 		}
 
@@ -230,7 +230,7 @@ func TestJacobian(t *testing.T) {
 			t.Errorf("Case %d (origin): unexpected Jacobian.\nwant: %v\ngot:  %v",
 				tc, mat.Formatted(want, mat.Prefix("      ")), mat.Formatted(got, mat.Prefix("      ")))
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %d (origin): x modified", tc)
 		}
 
@@ -244,7 +244,7 @@ func TestJacobian(t *testing.T) {
 			t.Errorf("Case %d (concurrent, origin): unexpected Jacobian.\nwant: %v\ngot:  %v",
 				tc, mat.Formatted(want, mat.Prefix("      ")), mat.Formatted(got, mat.Prefix("      ")))
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %d (concurrent, origin): x modified", tc)
 		}
 	}

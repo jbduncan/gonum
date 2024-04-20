@@ -6,6 +6,7 @@ package fd
 
 import (
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -88,7 +89,7 @@ func TestGradient(t *testing.T) {
 		if !floats.EqualApprox(gradient, trueGradient, test.tol) {
 			t.Errorf("Case %v: gradient mismatch in serial with nil. Want: %v, Got: %v.", i, trueGradient, gradient)
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %v: x modified during call to gradient in serial with nil.", i)
 		}
 
@@ -102,7 +103,7 @@ func TestGradient(t *testing.T) {
 		if !floats.EqualApprox(gradient, trueGradient, test.tol) {
 			t.Errorf("Case %v: gradient mismatch in serial. Want: %v, Got: %v.", i, trueGradient, gradient)
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %v: x modified during call to gradient in serial with non-nil.", i)
 		}
 
@@ -130,7 +131,7 @@ func TestGradient(t *testing.T) {
 		if !floats.EqualApprox(gradient, trueGradient, test.tol) {
 			t.Errorf("Case %v: gradient mismatch with unknown origin in parallel. Want: %v, Got: %v.", i, trueGradient, gradient)
 		}
-		if !floats.Equal(x, xcopy) {
+		if !slices.Equal(x, xcopy) {
 			t.Errorf("Case %v: x modified during call to gradient in parallel", i)
 		}
 

@@ -5,6 +5,7 @@
 package mat
 
 import (
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -210,7 +211,7 @@ func denseEqual(a *Dense, acomp matComp) bool {
 	if ac2 != acomp.c {
 		return false
 	}
-	if !floats.Equal(a.mat.Data, acomp.data) {
+	if !slices.Equal(a.mat.Data, acomp.data) {
 		return false
 	}
 	return true

@@ -7,11 +7,11 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -79,7 +79,7 @@ func dgeconTest(t *testing.T, impl Dgeconer, rnd *rand.Rand, n, lda int) {
 
 		// Compute an estimate of rcond using the LU factorization and Dgecon.
 		rcondGot := impl.Dgecon(norm, n, aFac, lda, aNorm, work, iwork)
-		if !floats.Equal(aFac, aFacCopy) {
+		if !slices.Equal(aFac, aFacCopy) {
 			t.Errorf("%v: unexpected modification of aFac", name)
 		}
 

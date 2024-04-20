@@ -6,6 +6,7 @@ package testlapack
 
 import (
 	"math"
+	"slices"
 	"testing"
 
 	"gonum.org/v1/gonum/floats"
@@ -41,7 +42,7 @@ func DrsclTest(t *testing.T, impl Drscler) {
 		// yields approximately x. If overflow or underflow occurs then the scaling
 		// won't match.
 		impl.Drscl(len(test.x), test.a, xcopy, 1)
-		if floats.Equal(xcopy, test.x) {
+		if slices.Equal(xcopy, test.x) {
 			t.Errorf("x unchanged during call to drscl. a = %v, x = %v.", test.a, test.x)
 		}
 		impl.Drscl(len(test.x), 1/test.a, xcopy, 1)

@@ -7,6 +7,7 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -117,7 +118,7 @@ func dlantrTest(t *testing.T, impl Dlantrer, rnd *rand.Rand, uplo blas.Uplo, dia
 		}
 		normGot := impl.Dlantr(norm, uplo, diag, m, n, a, lda, work)
 
-		if !floats.Equal(a, aCopy) {
+		if !slices.Equal(a, aCopy) {
 			t.Fatalf("%v: unexpected modification of a", name)
 		}
 

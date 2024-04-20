@@ -7,6 +7,7 @@ package optimize
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"gonum.org/v1/gonum/floats"
@@ -1238,7 +1239,7 @@ func testLocal(t *testing.T, tests []unconstrainedTest, method Method) {
 			g := make([]float64, len(test.x))
 			test.p.Grad(g, result.X)
 
-			if !floats.Equal(result.Gradient, g) {
+			if !slices.Equal(result.Gradient, g) {
 				t.Errorf("Case %d: Gradient at the optimum location not equal to the returned value for:\n%v", cas, test)
 			}
 
@@ -1291,7 +1292,7 @@ func testLocal(t *testing.T, tests []unconstrainedTest, method Method) {
 
 		// At the moment all the optimizers are deterministic, so check that we
 		// get _exactly_ the same answer second time as well.
-		if result.F != result2.F || !floats.Equal(result.X, result2.X) {
+		if result.F != result2.F || !slices.Equal(result.X, result2.X) {
 			t.Errorf("Different minimum second time for:\n%v", test)
 		}
 

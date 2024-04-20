@@ -6,6 +6,7 @@ package interp
 
 import (
 	"math"
+	"slices"
 	"testing"
 
 	"gonum.org/v1/gonum/floats"
@@ -163,7 +164,7 @@ func TestPiecewiseCubicFitWithDerivatives(t *testing.T) {
 	if pc.lastDyDx != lastDyDx {
 		t.Errorf("Mismatch in lastDxDy: got %v, want %g", pc.lastDyDx, lastDyDx)
 	}
-	if !floats.Equal(pc.xs, xs) {
+	if !slices.Equal(pc.xs, xs) {
 		t.Errorf("Mismatch in xs: got %v, want %v", pc.xs, xs)
 	}
 	coeffs := mat.NewDense(2, 4, []float64{3, -3, 1, 0, 1, -1, 0, 1})
@@ -684,7 +685,7 @@ func TestPiecewiseCubicFitWithSecondDerivatives(t *testing.T) {
 	if pc.lastY != ys[m] {
 		t.Errorf("Mismatch in lastY: got %v, want %g", pc.lastY, ys[m])
 	}
-	if !floats.Equal(pc.xs, xs) {
+	if !slices.Equal(pc.xs, xs) {
 		t.Errorf("Mismatch in xs: got %v, want %v", pc.xs, xs)
 	}
 	for i := 0; i < len(xs); i++ {

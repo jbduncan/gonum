@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"slices"
 	"strconv"
 	"testing"
 
@@ -496,12 +497,12 @@ func TestHistogram(t *testing.T) {
 		},
 	} {
 		hist := Histogram(nil, test.dividers, test.x, test.weights)
-		if !floats.Equal(hist, test.ans) {
+		if !slices.Equal(hist, test.ans) {
 			t.Errorf("Hist mismatch case %d. Expected %v, Found %v", i, test.ans, hist)
 		}
 		// Test with non-zero values
 		Histogram(hist, test.dividers, test.x, test.weights)
-		if !floats.Equal(hist, test.ans) {
+		if !slices.Equal(hist, test.ans) {
 			t.Errorf("Hist mismatch case %d. Expected %v, Found %v", i, test.ans, hist)
 		}
 	}
@@ -1375,10 +1376,10 @@ func TestCDF(t *testing.T) {
 		for j, q := range test.q {
 			for k, kind := range cumulantKinds {
 				v := CDF(q, kind, test.x, test.weights)
-				if !floats.Equal(copyX, test.x) && !math.IsNaN(v) {
+				if !slices.Equal(copyX, test.x) && !math.IsNaN(v) {
 					t.Errorf("x changed for case %d kind %d percentile %v", i, k, q)
 				}
-				if !floats.Equal(copyW, test.weights) {
+				if !slices.Equal(copyW, test.weights) {
 					t.Errorf("x changed for case %d kind %d percentile %v", i, k, q)
 				}
 				if v != test.ans[k][j] && !(math.IsNaN(v) && math.IsNaN(test.ans[k][j])) {

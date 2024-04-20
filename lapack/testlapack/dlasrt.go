@@ -5,9 +5,9 @@
 package testlapack
 
 import (
+	"slices"
 	"testing"
 
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -67,13 +67,13 @@ func DlasrtTest(t *testing.T, impl Dlasrter) {
 
 		copy(ds, test.data)
 		impl.Dlasrt(lapack.SortIncreasing, n, ds)
-		if !floats.Equal(ds, test.wantInc) {
+		if !slices.Equal(ds, test.wantInc) {
 			t.Errorf("Case #%v: unexpected result of SortIncreasing", ti)
 		}
 
 		copy(ds, test.data)
 		impl.Dlasrt(lapack.SortDecreasing, n, ds)
-		if !floats.Equal(ds, test.wantDec) {
+		if !slices.Equal(ds, test.wantDec) {
 			t.Errorf("Case #%v: unexpected result of SortIncreasing", ti)
 		}
 	}

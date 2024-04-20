@@ -5,6 +5,7 @@
 package optimize
 
 import (
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -60,7 +61,7 @@ func TestListSearch(t *testing.T) {
 		if result.Status != MethodConverge {
 			t.Errorf("cas %v: status should be MethodConverge", cas)
 		}
-		if !floats.Equal(result.X, locs.RawRowView(minIdx)) {
+		if !slices.Equal(result.X, locs.RawRowView(minIdx)) {
 			t.Errorf("cas %v: did not find minimum of whole list", cas)
 		}
 
@@ -74,7 +75,7 @@ func TestListSearch(t *testing.T) {
 		if result.Status != MethodConverge {
 			t.Errorf("cas %v: status should be MethodConverge", cas)
 		}
-		if !floats.Equal(result.X, locs.RawRowView(minIdx)) {
+		if !slices.Equal(result.X, locs.RawRowView(minIdx)) {
 			t.Errorf("cas %v: did not find minimum of whole list concurrent", cas)
 		}
 
@@ -87,7 +88,7 @@ func TestListSearch(t *testing.T) {
 		if result.Status != MethodConverge {
 			t.Errorf("cas %v: status should be MethodConverge", cas)
 		}
-		if !floats.Equal(result.X, locs.RawRowView(minIdx)) {
+		if !slices.Equal(result.X, locs.RawRowView(minIdx)) {
 			t.Errorf("cas %v: did not find minimum of whole list concurrent", cas)
 		}
 
@@ -103,7 +104,7 @@ func TestListSearch(t *testing.T) {
 		if result.Status != MethodConverge {
 			t.Errorf("cas %v: status should be MethodConverge", cas)
 		}
-		if !floats.Equal(result.X, locs.RawRowView(minIdx)) {
+		if !slices.Equal(result.X, locs.RawRowView(minIdx)) {
 			t.Errorf("cas %v: did not find minimum of whole list last sample", cas)
 		}
 
@@ -122,7 +123,7 @@ func TestListSearch(t *testing.T) {
 		if result.Status != FunctionEvaluationLimit {
 			t.Errorf("cas %v: status was not FunctionEvaluationLimit", cas)
 		}
-		if !floats.Equal(result.X, locs.RawRowView(minIdxFirst)) {
+		if !slices.Equal(result.X, locs.RawRowView(minIdxFirst)) {
 			t.Errorf("cas %v: did not find minimum of shortened list serial", cas)
 		}
 
@@ -145,7 +146,7 @@ func TestListSearch(t *testing.T) {
 		if result.Status != FunctionEvaluationLimit {
 			t.Errorf("cas %v: status was not FunctionEvaluationLimit", cas)
 		}
-		if !floats.Equal(result.X, locs.RawRowView(minIdxFirst)) {
+		if !slices.Equal(result.X, locs.RawRowView(minIdxFirst)) {
 			t.Errorf("cas %v: did not find minimum of shortened list concurrent", cas)
 		}
 	}

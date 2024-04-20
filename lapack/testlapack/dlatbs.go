@@ -7,6 +7,7 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -72,7 +73,7 @@ func dlatbsTest(t *testing.T, impl Dlatbser, rnd *rand.Rand, kind int, uplo blas
 	name := fmt.Sprintf("kind=%v,uplo=%v,trans=%v,diag=%v,n=%v,kd=%v,ldab=%v",
 		kind, string(uplo), string(trans), string(diag), n, kd, ldab)
 
-	if !floats.Equal(ab, abCopy) {
+	if !slices.Equal(ab, abCopy) {
 		t.Errorf("%v: unexpected modification of ab", name)
 	}
 	if floats.Count(func(v float64) bool { return v == -1 }, cnorm) > 0 {

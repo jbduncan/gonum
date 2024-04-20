@@ -7,6 +7,7 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -97,7 +98,7 @@ func dlansbTest(t *testing.T, impl Dlansber, rnd *rand.Rand, uplo blas.Uplo, n, 
 
 		normGot := impl.Dlansb(norm, uplo, n, kd, ab, ldab, work)
 
-		if !floats.Equal(ab, abCopy) {
+		if !slices.Equal(ab, abCopy) {
 			t.Fatalf("%v: unexpected modification of ab", name)
 		}
 

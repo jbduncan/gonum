@@ -6,9 +6,9 @@ package quad
 
 import (
 	"math"
+	"slices"
 	"testing"
 
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/floats/scalar"
 )
 
@@ -77,10 +77,10 @@ func TestLegendreSingle(t *testing.T) {
 		for i := range xsSingle {
 			xsSingle[i], weightsSingle[i] = l.FixedLocationSingle(n, i, test.min, test.max)
 		}
-		if !floats.Equal(xs, xsSingle) {
+		if !slices.Equal(xs, xsSingle) {
 			t.Errorf("Case %d: xs mismatch batch and single", c)
 		}
-		if !floats.Equal(weights, weightsSingle) {
+		if !slices.Equal(weights, weightsSingle) {
 			t.Errorf("Case %d: weights mismatch batch and single", c)
 		}
 	}

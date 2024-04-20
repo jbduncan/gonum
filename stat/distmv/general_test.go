@@ -6,6 +6,7 @@ package distmv
 
 import (
 	"math"
+	"slices"
 	"testing"
 
 	"gonum.org/v1/gonum/floats"
@@ -54,7 +55,7 @@ func checkMean(t *testing.T, cas int, x *mat.Dense, m Meaner, tol float64) {
 	// Check that the answer is identical when using nil or non-nil.
 	mean2 := make([]float64, len(mean))
 	m.Mean(mean2)
-	if !floats.Equal(mean, mean2) {
+	if !slices.Equal(mean, mean2) {
 		t.Errorf("Mean mismatch when providing nil and slice. Case %v", cas)
 	}
 

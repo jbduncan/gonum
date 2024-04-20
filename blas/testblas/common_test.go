@@ -7,6 +7,7 @@ package testblas
 import (
 	"math"
 	"math/cmplx"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -187,7 +188,7 @@ func TestFlattenTriangular(t *testing.T) {
 		},
 	} {
 		a := flattenTriangular(test.a, test.ul)
-		if !floats.Equal(a, test.ans) {
+		if !slices.Equal(a, test.ans) {
 			t.Errorf("Case %v. Want %v, got %v.", i, test.ans, a)
 		}
 	}

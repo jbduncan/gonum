@@ -7,13 +7,13 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
 	"gonum.org/v1/gonum/blas"
 	"gonum.org/v1/gonum/blas/blas64"
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -100,7 +100,7 @@ func dtbtrsTest(t *testing.T, impl Dtbtrser, rnd *rand.Rand, uplo blas.Uplo, tra
 	copy(got, b)
 	ok := impl.Dtbtrs(uplo, trans, diag, n, kd, nrhs, a, lda, got, ldb)
 
-	if !floats.Equal(a, aCopy) {
+	if !slices.Equal(a, aCopy) {
 		t.Errorf("%v: unexpected modification of A", name)
 	}
 
@@ -109,7 +109,7 @@ func dtbtrsTest(t *testing.T, impl Dtbtrser, rnd *rand.Rand, uplo blas.Uplo, tra
 	}
 
 	if !ok {
-		if !floats.Equal(got, b) {
+		if !slices.Equal(got, b) {
 			t.Errorf("%v: unexpected modification of B when singular", name)
 		}
 		return

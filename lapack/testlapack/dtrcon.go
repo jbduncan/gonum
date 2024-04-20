@@ -6,12 +6,12 @@ package testlapack
 
 import (
 	"fmt"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
 	"gonum.org/v1/gonum/blas"
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -118,7 +118,7 @@ func dtrconTest(t *testing.T, impl Dtrconer, rnd *rand.Rand, uplo blas.Uplo, dia
 
 		// Compute an estimate of rcond using Dtrcon.
 		rcondGot := impl.Dtrcon(norm, uplo, diag, n, a, lda, work, iwork)
-		if !floats.Equal(a, aCopy) {
+		if !slices.Equal(a, aCopy) {
 			t.Errorf("%v: unexpected modification of a", name)
 		}
 

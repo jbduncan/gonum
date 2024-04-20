@@ -7,13 +7,13 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
 	"gonum.org/v1/gonum/blas"
 	"gonum.org/v1/gonum/blas/blas64"
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -64,7 +64,7 @@ func dorgr2Test(t *testing.T, impl Dorgr2er, rnd *rand.Rand, m, n, k, lda int) {
 	}
 
 	// Check that tau hasn't been modified.
-	if !floats.Equal(tau, tauCopy) {
+	if !slices.Equal(tau, tauCopy) {
 		t.Errorf("%v: unexpected modification in tau", name)
 	}
 

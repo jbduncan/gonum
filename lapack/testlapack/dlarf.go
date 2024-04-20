@@ -6,13 +6,13 @@ package testlapack
 
 import (
 	"fmt"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
 	"gonum.org/v1/gonum/blas"
 	"gonum.org/v1/gonum/blas/blas64"
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -122,10 +122,10 @@ func dlarfTest(t *testing.T, impl Dlarfer, rnd *rand.Rand, side blas.Side, m, n,
 
 	name := fmt.Sprintf("m=%d,n=%d,incv=%d,tau=%f,ldc=%d", m, n, incv, tau, ldc)
 
-	if !floats.Equal(v, vCopy) {
+	if !slices.Equal(v, vCopy) {
 		t.Errorf("%v: unexpected modification of v", name)
 	}
-	if tau == 0 && !floats.Equal(got, cCopy) {
+	if tau == 0 && !slices.Equal(got, cCopy) {
 		t.Errorf("%v: unexpected modification of C", name)
 	}
 

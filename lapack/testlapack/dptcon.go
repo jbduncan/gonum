@@ -7,11 +7,11 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -54,10 +54,10 @@ func dptconTest(t *testing.T, impl Dptconer, rnd *rand.Rand, n int) {
 	rcondGot := impl.Dptcon(n, d, e, aNorm, work)
 
 	// Check that Dptcon didn't modify d and e.
-	if !floats.Equal(d, dCopy) {
+	if !slices.Equal(d, dCopy) {
 		t.Errorf("%v: unexpected modification of d", name)
 	}
-	if !floats.Equal(e, eCopy) {
+	if !slices.Equal(e, eCopy) {
 		t.Errorf("%v: unexpected modification of e", name)
 	}
 

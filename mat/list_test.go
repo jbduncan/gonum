@@ -10,6 +10,7 @@ import (
 	"fmt"
 	"math"
 	"reflect"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -1500,7 +1501,7 @@ func testOneInput(t *testing.T,
 						t.Errorf("Wrong answer when a maybeSame: %s", errStr)
 					}
 					postData := underlyingData(receiver)
-					if !floats.Equal(preData, postData) {
+					if !slices.Equal(preData, postData) {
 						t.Errorf("Original data slice not modified when a maybeSame: %s", errStr)
 					}
 				}
@@ -1676,7 +1677,7 @@ func testTwoInput(t *testing.T,
 							t.Errorf("Wrong answer when a maybeSame: %s", errStr)
 						}
 						postData := underlyingData(receiver)
-						if !floats.Equal(preData, postData) {
+						if !slices.Equal(preData, postData) {
 							t.Errorf("Original data slice not modified when a maybeSame: %s", errStr)
 						}
 					}
@@ -1697,7 +1698,7 @@ func testTwoInput(t *testing.T,
 							t.Errorf("Wrong answer when b maybeSame: %s", errStr)
 						}
 						postData := underlyingData(receiver)
-						if !floats.Equal(preData, postData) {
+						if !slices.Equal(preData, postData) {
 							t.Errorf("Original data slice not modified when b maybeSame: %s", errStr)
 						}
 					}
@@ -1731,7 +1732,7 @@ func testTwoInput(t *testing.T,
 							t.Errorf("Wrong answer when both maybeSame: %s", errStr)
 						}
 						postData := underlyingData(receiver)
-						if !floats.Equal(preData, postData) {
+						if !slices.Equal(preData, postData) {
 							t.Errorf("Original data slice not modified when both maybeSame: %s", errStr)
 						}
 					}

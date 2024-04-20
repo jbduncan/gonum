@@ -6,11 +6,11 @@ package stat
 
 import (
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/mat"
 )
 
@@ -69,10 +69,10 @@ func TestCovarianceMatrix(t *testing.T) {
 		if !mat.EqualApprox(&cov, test.ans, tol) {
 			t.Errorf("%d: expected cov %v, found %v", i, test.ans, &cov)
 		}
-		if !floats.Equal(d, r.Data) {
+		if !slices.Equal(d, r.Data) {
 			t.Errorf("%d: data was modified during execution", i)
 		}
-		if !floats.Equal(w, test.weights) {
+		if !slices.Equal(w, test.weights) {
 			t.Errorf("%d: weights was modified during execution", i)
 		}
 
@@ -172,10 +172,10 @@ func TestCorrelationMatrix(t *testing.T) {
 		if !mat.Equal(&corr, test.ans) {
 			t.Errorf("%d: expected corr %v, found %v", i, test.ans, &corr)
 		}
-		if !floats.Equal(d, r.Data) {
+		if !slices.Equal(d, r.Data) {
 			t.Errorf("%d: data was modified during execution", i)
 		}
-		if !floats.Equal(w, test.weights) {
+		if !slices.Equal(w, test.weights) {
 			t.Errorf("%d: weights was modified during execution", i)
 		}
 

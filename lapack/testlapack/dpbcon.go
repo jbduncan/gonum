@@ -7,11 +7,11 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 	"gonum.org/v1/gonum/blas"
-	"gonum.org/v1/gonum/floats"
 	"gonum.org/v1/gonum/lapack"
 )
 
@@ -63,7 +63,7 @@ func dpbconTest(t *testing.T, impl Dpbconer, uplo blas.Uplo, n, kd, ldab int, rn
 	copy(abFacCopy, abFac)
 	rCondGot := impl.Dpbcon(uplo, n, kd, abFac, ldab, aNorm, work, iwork)
 
-	if !floats.Equal(abFac, abFacCopy) {
+	if !slices.Equal(abFac, abFacCopy) {
 		t.Errorf("%v: unexpected modification of ab", name)
 	}
 

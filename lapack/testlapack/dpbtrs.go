@@ -7,13 +7,13 @@ package testlapack
 import (
 	"fmt"
 	"math"
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
 
 	"gonum.org/v1/gonum/blas"
 	"gonum.org/v1/gonum/blas/blas64"
-	"gonum.org/v1/gonum/floats"
 )
 
 type Dpbtrser interface {
@@ -79,7 +79,7 @@ func dpbtrsTest(t *testing.T, impl Dpbtrser, rnd *rand.Rand, uplo blas.Uplo, n, 
 	xGot := b
 
 	// Check that the Cholesky factorization matrix has not been modified.
-	if !floats.Equal(abFac, abFacCopy) {
+	if !slices.Equal(abFac, abFacCopy) {
 		t.Errorf("%v: unexpected modification of ab", name)
 	}
 

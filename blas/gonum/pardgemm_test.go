@@ -5,6 +5,7 @@
 package gonum
 
 import (
+	"slices"
 	"testing"
 
 	"golang.org/x/exp/rand"
@@ -165,10 +166,10 @@ func testMatchParallelSerial(t *testing.T, rnd *rand.Rand, i int, tA, tB blas.Tr
 	dgemmSerial(tA == blas.Trans, tB == blas.Trans, m, n, k, a, lda, b, ldb, want, ldc, alpha)
 	dgemmParallel(tA == blas.Trans, tB == blas.Trans, m, n, k, a, lda, b, ldb, c, ldc, alpha)
 
-	if !floats.Equal(a, aCopy) {
+	if !slices.Equal(a, aCopy) {
 		t.Errorf("Case %v: a changed during call to dgemmParallel", i)
 	}
-	if !floats.Equal(b, bCopy) {
+	if !slices.Equal(b, bCopy) {
 		t.Errorf("Case %v: b changed during call to dgemmParallel", i)
 	}
 	if !floats.EqualApprox(c, want, 1e-12) {
