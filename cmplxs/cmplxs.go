@@ -8,6 +8,7 @@ import (
 	"errors"
 	"math"
 	"math/cmplx"
+	"slices"
 
 	"gonum.org/v1/gonum/cmplxs/cscalar"
 	"gonum.org/v1/gonum/internal/asm/c128"
@@ -217,45 +218,27 @@ func Dot(s1, s2 []complex128) complex128 {
 
 // Equal returns true when the slices have equal lengths and
 // all elements are numerically identical.
+//
+// Deprecated: This function simply calls [slices.Equal].
 func Equal(s1, s2 []complex128) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i, val := range s1 {
-		if s2[i] != val {
-			return false
-		}
-	}
-	return true
+	return slices.Equal(s1, s2)
 }
 
 // EqualApprox returns true when the slices have equal lengths and
 // all element pairs have an absolute tolerance less than tol or a
 // relative tolerance less than tol.
 func EqualApprox(s1, s2 []complex128, tol float64) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i, a := range s1 {
-		if !cscalar.EqualWithinAbsOrRel(a, s2[i], tol, tol) {
-			return false
-		}
-	}
-	return true
+	return slices.EqualFunc(s1, s2, func(a complex128, b complex128) bool {
+		return cscalar.EqualWithinAbsOrRel(a, b, tol, tol)
+	})
 }
 
 // EqualFunc returns true when the slices have the same lengths
 // and the function returns true for all element pairs.
+//
+// Deprecated: This function simply calls [slices.EqualFunc].
 func EqualFunc(s1, s2 []complex128, f func(complex128, complex128) bool) bool {
-	if len(s1) != len(s2) {
-		return false
-	}
-	for i, val := range s1 {
-		if !f(val, s2[i]) {
-			return false
-		}
-	}
-	return true
+	return slices.EqualFunc(s1, s2, f)
 }
 
 // EqualLengths returns true when all of the slices have equal length,
@@ -321,12 +304,7 @@ func Find(inds []int, f func(complex128) bool, s []complex128, k int) ([]int, er
 // HasNaN returns true when the slice s has any values that are NaN and false
 // otherwise.
 func HasNaN(s []complex128) bool {
-	for _, v := range s {
-		if cmplx.IsNaN(v) {
-			return true
-		}
-	}
-	return false
+	return slices.ContainsFunc(s, cmplx.IsNaN)
 }
 
 // Imag places the imaginary components of src into dst.
@@ -563,25 +541,18 @@ func Real(dst []float64, src []complex128) []float64 {
 }
 
 // Reverse reverses the order of elements in the slice.
+//
+// Deprecated: This function simply calls [slices.Reverse].
 func Reverse(s []complex128) {
-	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
-		s[i], s[j] = s[j], s[i]
-	}
+	slices.Reverse(s)
 }
 
 // Same returns true when the input slices have the same length and all
 // elements have the same value with NaN treated as the same.
 func Same(s, t []complex128) bool {
-	if len(s) != len(t) {
-		return false
-	}
-	for i, v := range s {
-		w := t[i]
-		if v != w && !(cmplx.IsNaN(v) && cmplx.IsNaN(w)) {
-			return false
-		}
-	}
-	return true
+	return slices.EqualFunc(s, t, func(v complex128, w complex128) bool {
+		return v == w || (cmplx.IsNaN(v) && cmplx.IsNaN(w))
+	})
 }
 
 // Scale multiplies every element in dst by the scalar c.
