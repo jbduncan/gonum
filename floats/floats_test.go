@@ -391,41 +391,6 @@ func TestEqual(t *testing.T) {
 	}
 }
 
-// TODO: move to bottom
-func BenchmarkEqual(b *testing.B) {
-	src := rand.NewSource(42)
-
-	for _, size := range []int{Small, Medium, Large} {
-		first := randomSlice(size, src)
-		second := slices.Concat(first[:size/2], randomSlice(size/2, src))
-		third := randomSlice(size, src)
-
-		b.Run(fmt.Sprintf("equal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if !Equal(first, first) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("half-equal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if Equal(first, second) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("unequal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if Equal(first, third) {
-					b.FailNow()
-				}
-			}
-		})
-	}
-}
-
 func TestEqualApprox(t *testing.T) {
 	t.Parallel()
 	s1 := []float64{1, 2, 3, 4}
@@ -449,50 +414,6 @@ func TestEqualApprox(t *testing.T) {
 	}
 }
 
-// TODO: move to bottom
-func BenchmarkEqualApprox(b *testing.B) {
-	src := rand.NewSource(42)
-
-	for _, size := range []int{Small, Medium, Large} {
-		first := randomSlice(size, src)
-		second := slices.Concat([]float64{first[0] + 1e-10}, first[1:])
-		third := slices.Concat(first[:size/2], randomSlice(size/2, src))
-		fourth := randomSlice(size, src)
-
-		b.Run(fmt.Sprintf("equal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if !EqualApprox(first, first, 1e-9) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("approximately equal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if !EqualApprox(first, second, 1e-9) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("half-equal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if EqualApprox(first, third, 1e-9) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("unequal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if EqualApprox(first, fourth, 1e-9) {
-					b.FailNow()
-				}
-			}
-		})
-	}
-}
-
 func TestEqualFunc(t *testing.T) {
 	t.Parallel()
 	s1 := []float64{1, 2, 3, 4}
@@ -507,42 +428,6 @@ func TestEqualFunc(t *testing.T) {
 	}
 	if EqualFunc(s1, []float64{}, eq) {
 		t.Errorf("Unequal slice lengths returned as equal")
-	}
-}
-
-// TODO: move to bottom
-func BenchmarkEqualFunc(b *testing.B) {
-	src := rand.NewSource(42)
-	eq := func(x, y float64) bool { return x == y }
-
-	for _, size := range []int{Small, Medium, Large} {
-		first := randomSlice(size, src)
-		second := slices.Concat(first[:size/2], randomSlice(size/2, src))
-		third := randomSlice(size, src)
-
-		b.Run(fmt.Sprintf("equal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if !EqualFunc(first, first, eq) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("half-equal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if EqualFunc(first, second, eq) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("unequal slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if EqualFunc(first, third, eq) {
-					b.FailNow()
-				}
-			}
-		})
 	}
 }
 
@@ -756,41 +641,6 @@ func TestHasNaN(t *testing.T) {
 		if b != test.ans {
 			t.Errorf("HasNaN mismatch case %d. Expected %v, Found %v", i, test.ans, b)
 		}
-	}
-}
-
-// TODO: move to bottom
-func BenchmarkHasNaN(b *testing.B) {
-	src := rand.NewSource(42)
-
-	for _, size := range []int{Small, Medium, Large} {
-		noNaN := randomSlice(size, src)
-		nanAtBeginning := slices.Concat([]float64{math.NaN()}, noNaN[:size-1])
-		nanInMiddle := slices.Concat(noNaN[:(size/2)-1], []float64{math.NaN()}, noNaN[size/2:])
-
-		b.Run(fmt.Sprintf("no NaN, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if HasNaN(noNaN) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("NaN at the beginning, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if !HasNaN(nanAtBeginning) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("NaN in the middle, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if !HasNaN(nanInMiddle) {
-					b.FailNow()
-				}
-			}
-		})
 	}
 }
 
@@ -1477,41 +1327,6 @@ func TestSame(t *testing.T) {
 	}
 }
 
-// TODO: move to bottom
-func BenchmarkSame(b *testing.B) {
-	src := rand.NewSource(42)
-
-	for _, size := range []int{Small, Medium, Large} {
-		first := randomSlice(size, src)
-		second := slices.Concat(first[:size/2], randomSlice(size/2, src))
-		third := randomSlice(size, src)
-
-		b.Run(fmt.Sprintf("same slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if !Same(first, first) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("half-different slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if Same(first, second) {
-					b.FailNow()
-				}
-			}
-		})
-
-		b.Run(fmt.Sprintf("different slices, size %d", size), func(b *testing.B) {
-			for i := 0; i < b.N; i++ {
-				if Same(first, third) {
-					b.FailNow()
-				}
-			}
-		})
-	}
-}
-
 func TestScale(t *testing.T) {
 	t.Parallel()
 	s := []float64{3, 4, 1, 7, 5}
@@ -1974,6 +1789,183 @@ func BenchmarkDotMed(b *testing.B)   { benchmarkDot(b, Medium) }
 func BenchmarkDotLarge(b *testing.B) { benchmarkDot(b, Large) }
 func BenchmarkDotHuge(b *testing.B)  { benchmarkDot(b, Huge) }
 
+func BenchmarkEqual(b *testing.B) {
+	src := rand.NewSource(1)
+
+	for _, bb := range []struct {
+		name string
+		size int
+	}{
+		{name: "Small", size: Small},
+		{name: "Medium", size: Medium},
+		{name: "Large", size: Large},
+	} {
+		s1 := randomSlice(bb.size, src)
+		s2 := slices.Concat(s1[:bb.size/2], randomSlice(bb.size/2, src))
+		s3 := randomSlice(bb.size, src)
+
+		b.Run(fmt.Sprintf("%sEqualSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if !Equal(s1, s1) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sHalfEqualSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if Equal(s1, s2) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sUnequalSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if Equal(s1, s3) {
+					b.FailNow()
+				}
+			}
+		})
+	}
+}
+
+func BenchmarkEqualApprox(b *testing.B) {
+	src := rand.NewSource(1)
+
+	for _, bb := range []struct {
+		name string
+		size int
+	}{
+		{name: "Small", size: Small},
+		{name: "Medium", size: Medium},
+		{name: "Large", size: Large},
+	} {
+		s1 := randomSlice(bb.size, src)
+		s2 := slices.Clone(s1)
+		s2[0] += 1e-10
+		s3 := slices.Concat(s1[:bb.size/2], randomSlice(bb.size/2, src))
+		s4 := randomSlice(bb.size, src)
+
+		b.Run(fmt.Sprintf("%sEqualSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if !EqualApprox(s1, s1, 1e-9) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sApproxEqualSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if !EqualApprox(s1, s2, 1e-9) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sHalfEqualSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if EqualApprox(s1, s3, 1e-9) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sUnequalSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if EqualApprox(s1, s4, 1e-9) {
+					b.FailNow()
+				}
+			}
+		})
+	}
+}
+
+func BenchmarkEqualFunc(b *testing.B) {
+	src := rand.NewSource(1)
+	eq := func(x, y float64) bool { return x == y }
+
+	for _, bb := range []struct {
+		name string
+		size int
+	}{
+		{name: "Small", size: Small},
+		{name: "Medium", size: Medium},
+		{name: "Large", size: Large},
+	} {
+		s1 := randomSlice(bb.size, src)
+		s2 := slices.Concat(s1[:bb.size/2], randomSlice(bb.size/2, src))
+		s3 := randomSlice(bb.size, src)
+
+		b.Run(fmt.Sprintf("%sEqualSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if !EqualFunc(s1, s1, eq) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sHalfEqualSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if EqualFunc(s1, s2, eq) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sUnequalSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if EqualFunc(s1, s3, eq) {
+					b.FailNow()
+				}
+			}
+		})
+	}
+}
+
+func BenchmarkHasNaN(b *testing.B) {
+	src := rand.NewSource(1)
+
+	for _, bb := range []struct {
+		name string
+		size int
+	}{
+		{name: "Small", size: Small},
+		{name: "Medium", size: Medium},
+		{name: "Large", size: Large},
+	} {
+		s1 := randomSlice(bb.size, src)
+		s2 := slices.Clone(s1)
+		s2[0] = math.NaN()
+		s3 := slices.Clone(s1)
+		s3[bb.size/2] = math.NaN()
+
+		b.Run(fmt.Sprintf("%sNoNaN", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if HasNaN(s1) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sNaNAtStart", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if !HasNaN(s2) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sNanInMiddle", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if !HasNaN(s3) {
+					b.FailNow()
+				}
+			}
+		})
+	}
+}
+
 func benchmarkAddScaledTo(b *testing.B, size int) {
 	src := rand.NewSource(1)
 	dst := randomSlice(size, src)
@@ -2057,3 +2049,44 @@ func BenchmarkReverseSmall(b *testing.B)  { benchmarkReverse(b, Small) }
 func BenchmarkReverseMedium(b *testing.B) { benchmarkReverse(b, Medium) }
 func BenchmarkReverseLarge(b *testing.B)  { benchmarkReverse(b, Large) }
 func BenchmarkReverseHuge(b *testing.B)   { benchmarkReverse(b, Huge) }
+
+func BenchmarkSame(b *testing.B) {
+	src := rand.NewSource(1)
+
+	for _, bb := range []struct {
+		name string
+		size int
+	}{
+		{name: "Small", size: Small},
+		{name: "Medium", size: Medium},
+		{name: "Large", size: Large},
+	} {
+		s1 := randomSlice(bb.size, src)
+		s2 := slices.Concat(s1[:bb.size/2], randomSlice(bb.size/2, src))
+		s3 := randomSlice(bb.size, src)
+
+		b.Run(fmt.Sprintf("%sSameSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if !Same(s1, s1) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sHalfSameSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if Same(s1, s2) {
+					b.FailNow()
+				}
+			}
+		})
+
+		b.Run(fmt.Sprintf("%sDifferentSlices", bb.name), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				if Same(s1, s3) {
+					b.FailNow()
+				}
+			}
+		})
+	}
+}
