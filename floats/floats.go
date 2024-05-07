@@ -618,7 +618,10 @@ func Reverse(s []float64) {
 }
 
 // Same returns true when the input slices have the same length and all
-// elements have the same value with NaN treated as the same.
+// elements have the same value with NaN treated as the same. It is
+// functionally equivalent to:
+//
+//	slices.Compare(s, t) == 0
 func Same(s, t []float64) bool {
 	return slices.Compare(s, t) == 0
 }
